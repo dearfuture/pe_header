@@ -1,0 +1,54 @@
+E:\《Windows_PE权威指南》source\chapter4\LockTray.exe
+
+PEHeader (3ch) = b0h
+DataDirectory     b0h + 78h = 128h
+DataDirectory[1]  128h + 8h = 130h
+RVA(IID) DataDirectory[1].VirtualAddress = 2018h
+2000h<=2018h<3000h  
+FOA(IID)  2018h-2000h+(600h)=618h
+
+//user32.dll
+INT1(INT)
+Thunk of user32.dll (由IID1指向)
+RVA(INT1)/RVA(OriginalFirstThunk) (618h)=205ch
+FOA(OriginalFirstThunk) 205ch-2000h+600h=65ch
+(65ch+00h)=208ah-->(68ah)=|022dh|EnableWindow
+(66ch+08h)=207ch-->(67ch)=|00c8h|FindWindowA
+(66ch+10h)=206ch-->(66ch)=|00a8h|ShowWindow
+Name=user32.dll
+IAT1
+RVA(FirstThunk)  (618h+10h)=2008h
+2000h<=2008h<3000h
+FOA(IAT1)   2008h-2000h+600h=608h
+(608h+00h)=208ah-->(68ah)=|022dh|EnableWindow)
+(608h+04h)=207ch-->(67ch)=|00c8h|FindWindowA
+(608h+08h)=206ch-->(66ch)=|00a8h|ShowWindow
+
+//kernel32.dll
+INT2
+Thunk of kernel32.dll  (由IID2指向，IID2紧跟在IID1，即addr(IID2)=addr(IID1)+14h)
+RVA(INT2)/RVA(OriginalFirstThunk) (618h+14h)=2054h
+FOA(OriginalFirstThunk) 2054h-2000h+600h=654h
+(654h+00h)=20a4h-->(6a4h)=|4500h|ExitProcess
+Name=kernel32.dll
+IAT2(即IAT/DataDirectory[12])
+RVA(FirstThunk)  (618h+14h+10h)=2000h
+2000h<=2000h<3000h
+FOA(IAT2)   2000h-2000h+600h=600h
+(600h+00h)=20a4h-->(6a4h)=|4500h|ExitProcess
+
+
+IAT
+DataDirectory[12]   128h+8h*12=188h
+RVA(IAT)  DataDirectory[12].VirtualAddress = 2000h
+2000h<=2000h<3000h
+FOA(IAT)   2000h-2000h+600h=600h
+(600h+00h)=20a4h-->(6a4h)=|4500h|ExitProcess
+4h的全0
+(600h+08h)=208ah-->(68ah)=|022dh|EnableWindow
+(600h+0ch)=207ch-->(67ch)=|00c8h|FindWindowA
+(600h+10h)=206ch-->(66ch)=|00a8h|ShowWindow
+4h的全0
+
+
+
