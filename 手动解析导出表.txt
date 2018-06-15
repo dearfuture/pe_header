@@ -1,0 +1,23 @@
+Counter.dll
+
+PEHeader (3ch) = c0h
+DataDirectory[0]   c0h + 78h = 138h
+
+RVA(IED) DataDirectory[0].VirtualAddress = 2060h
+2000h<=2060h<3000h  
+FOA(IED)  2060h-2000h+(600h)=660h
+
+按函数名导出
+Name   (660h+0ch)=209ch-->(69ch) Counter.dll
+nBase  (660h+10h)=0001h
+NumberOfFunctions	(660h+14h)=02h
+NumberOfNames	(660h+18h)=02h
+AddressOfFunctions  (660h+1ch)=2088h-->688h   (1046h, 1023h)
+AddressOfNames  (660h+20h)=2090h-->690h  (20a8h, 20b2h)  (6a8h, 6b2h) (_DecCount, _IncCount)
+AddressOfNameOrdinals  (660h+24h)=2098h-->698h  (00h, 01h)双字数组
+
+_DecCount 导出序号00h+nBase=01h  1046h
+_IncCount 导出序号02h+nBase=02h  1023h
+
+
+按序号导出
